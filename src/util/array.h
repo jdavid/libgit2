@@ -51,7 +51,9 @@ GIT_INLINE(int) git_array_grow(void *_a, size_t item_size)
 	size_t new_size;
 	char *new_array;
 
-	if (a->size < 8) {
+	if (a->size < a->asize) {
+		return 0;
+	} else if (a->size < 8) {
 		new_size = 8;
 	} else {
 		if (GIT_MULTIPLY_SIZET_OVERFLOW(&new_size, a->size, 3))
@@ -72,8 +74,8 @@ on_oom:
 }
 
 #define git_array_alloc(a) \
-	(((a).size < (a).asize || git_array_grow(&(a), sizeof(*(a).ptr)) == 0) ? \
-	&(a).ptr[(a).size++] : (void *)NULL)
+	(git_array_grow(&(a), sizeof(*(a).ptr)), \
+	 (a).ptr == NULL ? (void *)NULL : &(a).ptr[(a).size++])
 
 #define git_array_last(a) ((a).size ? &(a).ptr[(a).size - 1] : (void *)NULL)
 
