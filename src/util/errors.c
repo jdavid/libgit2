@@ -281,13 +281,10 @@ const git_error *git_error_last(void)
 	/* If the library is not initialized, return a static error. */
 	if (!git_runtime_init_count())
 		return &uninitialized_error;
-
 	if ((threadstate = threadstate_get()) == NULL)
 		return &tlsdata_error;
-
-	if (!threadstate->last)
-		return &no_error;
-
+//	if (!threadstate->last)
+//		return &no_error;
 	return threadstate->last;
 }
 

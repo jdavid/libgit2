@@ -317,7 +317,7 @@ static int certificate_check(winhttp_stream *s, int valid)
 	if (error == GIT_PASSTHROUGH)
 		error = valid ? 0 : GIT_ECERTIFICATE;
 
-	if (error < 0 && !git_error_last())
+	if (error < 0 && !git_error_last())  // FIXME
 		git_error_set(GIT_ERROR_HTTP, "user cancelled certificate check");
 
 	return error;
